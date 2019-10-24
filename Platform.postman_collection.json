@@ -1,0 +1,170 @@
+{
+	"info": {
+		"_postman_id": "1f6a7290-2581-41c6-afde-3ed7d9b4c08f",
+		"name": "Platform",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "ping self",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{gatewayEndpoint}}/pingself",
+					"host": [
+						"{{gatewayEndpoint}}"
+					],
+					"path": [
+						"pingself"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ping all",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{gatewayEndpoint}}/ping",
+					"host": [
+						"{{gatewayEndpoint}}"
+					],
+					"path": [
+						"ping"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get products - as guest",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{gatewayEndpoint}}/v1/products",
+					"host": [
+						"{{gatewayEndpoint}}"
+					],
+					"path": [
+						"v1",
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get products - as user",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{gatewayEndpoint}}/v1/products/1",
+					"host": [
+						"{{gatewayEndpoint}}"
+					],
+					"path": [
+						"v1",
+						"products",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get basket by user id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{gatewayEndpoint}}/v1/basket/1",
+					"host": [
+						"{{gatewayEndpoint}}"
+					],
+					"path": [
+						"v1",
+						"basket",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add product to user basket",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{gatewayEndpoint}}/v1/basket/1/3",
+					"host": [
+						"{{gatewayEndpoint}}"
+					],
+					"path": [
+						"v1",
+						"basket",
+						"1",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "remove 1 product from user basket",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{gatewayEndpoint}}/v1/basket/1/1",
+					"host": [
+						"{{gatewayEndpoint}}"
+					],
+					"path": [
+						"v1",
+						"basket",
+						"1",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "dc9897a5-91d1-4578-ad7f-86c868dee71a",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "63aa6cc9-ac88-4f1a-81d4-660682f19a14",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "837747fc-30b3-4668-a513-e03ce9fba3ad",
+			"key": "gatewayEndpoint",
+			"value": "http://0.0.0.0:3003",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}

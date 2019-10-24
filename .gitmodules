@@ -1,0 +1,15 @@
+[submodule "fm-gateway"]
+	path = fm-gateway
+	url = https://github.com/siluet/fm-gateway.git
+[submodule "fm-log"]
+	path = fm-log
+	url = https://github.com/siluet/fm-log.git
+[submodule "fm-service-basket"]
+	path = fm-service-basket
+	url = https://github.com/siluet/fm-service-basket.git
+[submodule "fm-service-product"]
+	path = fm-service-product
+	url = https://github.com/siluet/fm-service-product.git
+[submodule "fm-client"]
+	path = fm-client
+	url = https://github.com/siluet/fm-client.git
