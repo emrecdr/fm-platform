@@ -1,0 +1,62 @@
+ARG NODE_VER=12
+
+################################################################################
+## STAGE 1 - BUILDER-DEV IMAGE #################################################
+
+# Do npm install & build with full image
+FROM mhart/alpine-node:${NODE_VER} as builder
+LABEL maintainer="Emre CAMDERE <cemre79@gmail.com>"
+ARG ENV
+ARG VER
+ARG HOST
+ARG PORT
+ARG NAME
+ARG RABBITMQ_USERNAME
+ARG RABBITMQ_PASSWORD
+ARG RABBITMQ_HOST
+ARG RABBITMQ_PORT
+
+ENV NODE_ENV=production 
+ENV VER=${VER}
+
+RUN echo "Building gateway builder version: ${VER}"
+RUN mkdir /build
+WORKDIR /build
+COPY package.json package-lock.json .env.dist ./
+COPY src ./src
+RUN eval "echo \"$(cat .env.dist)\"" > .env && \
+    npm set progress=false && \
+    npm install --production
+
+
+# ################################################################################
+# ## STAGE 2 - PROD APP ##########################################################
+
+# And then copy over node_modules, etc from that stage to the smaller base image
+FROM mhart/alpine-node:slim-${NODE_VER}
+LABEL maintainer="Emre CAMDERE <cemre79@gmail.com>"
+LABEL description="FM Gateway"
+
+# update  packages
+RUN apk update \
+    && rm -rf /var/cache/apk/* \
+    && rm -rf /var/lib/apt/lists/*
+
+ARG TZ
+ARG VER
+ARG PORT
+
+ENV TZ ${TZ}
+ENV NODE_ENV production
+ENV DOCKER true
+
+RUN echo "Building gateway prod version: ${VER}"
+RUN mkdir /app 
+WORKDIR /app
+COPY --from=builder /build .
+
+EXPOSE ${PORT}
+
+# Start the app
+CMD ["node", "./src/app.js"]
+# CMD ["./node_modules/.bin/forever", "./src/app.js"]

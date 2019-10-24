@@ -4,9 +4,14 @@ volumes:
   rabbitmq-01-data:
     driver: local
 
+networks:
+  internal:
+    driver: bridge
+
 services:
   rabbitmq:
     image: rabbitmq:3.8-management-alpine
+    container_name: fm-rabbitmq-01
     hostname: rabbitmq-01
     ports:
       - ${RABBITMQ_PORT}:5672
@@ -15,15 +20,78 @@ services:
       - "rabbitmq-01-data:/var/lib/rabbitmq"
     environment:
       RABBITMQ_ERLANG_COOKIE: ${RABBITMQ_ERLANG_COOKIE}
-      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
-      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
-      RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_DEFAULT_VHOST}
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USERNAME}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+      RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_VHOST}
+    networks:
+      - internal
 
-  # gateway:
-  #   ports:
-  #     - ${GATEWAY_PORT}:${GATEWAY_PORT}
-  #   depends_on:
-  #     - rabbitmq
+  logger-trace:
+    build:
+      context: ./fm-log/
+      dockerfile: ./../Dockerfile-logger
+      args:
+        TZ: Europe/Amsterdam
+        ENV: ${ENV}
+        VER: ${GATEWAY_VER}
+        LISTEN: "*.trace"
+        RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
+        RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+        RABBITMQ_HOST: ${RABBITMQ_HOST}
+        RABBITMQ_PORT: ${RABBITMQ_PORT}
+    image: fm/logger-trace:${LOGGER_VER:-1.0.0}
+    container_name: fm-logger-trace
+    restart: always
+    depends_on:
+      - rabbitmq
+    networks:
+      - internal
+    
+  logger-error:
+    build:
+      context: ./fm-log/
+      dockerfile: ./../Dockerfile-logger
+      args:
+        TZ: Europe/Amsterdam
+        ENV: ${ENV}
+        VER: ${GATEWAY_VER}
+        LISTEN: "*.fatal *.error *.warning"
+        RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
+        RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+        RABBITMQ_HOST: ${RABBITMQ_HOST}
+        RABBITMQ_PORT: ${RABBITMQ_PORT}
+    image: fm/logger-error:${LOGGER_VER:-1.0.0}
+    container_name: fm-logger-error
+    restart: always
+    depends_on:
+      - rabbitmq
+    networks:
+      - internal
+
+  gateway:
+    build:
+      context: ./fm-gateway/
+      dockerfile: ./../Dockerfile-gateway
+      args:
+        TZ: Europe/Amsterdam
+        ENV: ${ENV}
+        VER: ${GATEWAY_VER}
+        NAME: ${GATEWAY_NAME}
+        HOST: ${GATEWAY_HOST}
+        PORT: ${GATEWAY_PORT}
+        RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
+        RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+        RABBITMQ_HOST: ${RABBITMQ_HOST}
+        RABBITMQ_PORT: ${RABBITMQ_PORT}
+    image: fm/gateway:${GATEWAY_VER:-1.0.0}
+    container_name: fm-gateway
+    restart: always
+    ports:
+      - ${GATEWAY_PORT}:${GATEWAY_PORT}
+    depends_on:
+      - rabbitmq
+    networks:
+      - internal
 
   # ms_catalog:
   #   ports:
