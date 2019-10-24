@@ -93,20 +93,46 @@ services:
     networks:
       - internal
 
-  # ms_catalog:
-  #   ports:
-  #     - ${MS_CATALOG_PORT}:${MS_CATALOG_PORT}
-  #   depends_on:
-  #     - rabbitmq
+  service-product:
+    build:
+      context: ./fm-service-product/
+      dockerfile: ./../Dockerfile-service-product
+      args:
+        TZ: Europe/Amsterdam
+        ENV: ${ENV}
+        VER: ${SRV_PRODUCT_VER}
+        NAME: ${SRV_PRODUCT_NAME}
+        RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
+        RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+        RABBITMQ_HOST: ${RABBITMQ_HOST}
+        RABBITMQ_PORT: ${RABBITMQ_PORT}
+    image: fm/service-product:${SRV_PRODUCT_VER:-1.0.0}
+    container_name: service-product
+    restart: always
+    depends_on:
+      - rabbitmq
+    networks:
+      - internal
 
-  # ms_basket:
-  #   ports:
-  #     - ${MS_BASKET_PORT}:${MS_BASKET_PORT}
-  #   depends_on:
-  #     - rabbitmq
+  service-basket:
+    build:
+      context: ./fm-service-basket/
+      dockerfile: ./../Dockerfile-service-basket
+      args:
+        TZ: Europe/Amsterdam
+        ENV: ${ENV}
+        VER: ${SRV_BASKET_VER}
+        NAME: ${SRV_BASKET_NAME}
+        RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
+        RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+        RABBITMQ_HOST: ${RABBITMQ_HOST}
+        RABBITMQ_PORT: ${RABBITMQ_PORT}
+    image: fm/service-basket:${SRV_BASKET_VER:-1.0.0}
+    container_name: service-basket
+    restart: always
+    depends_on:
+      - rabbitmq
+    networks:
+      - internal
 
-  # ms_log:
-  #   ports:
-  #     - ${MS_LOG_PORT}:${MS_LOG_PORT}
-  #   depends_on:
-  #     - rabbitmq
+
