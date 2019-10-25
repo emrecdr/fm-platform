@@ -9,6 +9,7 @@ When you start system it will start:
 - Basket Service: https://github.com/siluet/fm-service-basket.git
 
 ### Installation
+1.  Rename/Copy .env.dist file as .env and alter the config values with actual ones.
 1. `$ docker-compose up`  or  `$ docker-compose up -d` will start whole backend systems.
 
 #### Postman
