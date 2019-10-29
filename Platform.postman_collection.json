@@ -6,6 +6,41 @@
 	},
 	"item": [
 		{
+			"name": "documentation - json",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{gatewayEndpoint}}/docs/json",
+					"host": [
+						"{{gatewayEndpoint}}"
+					],
+					"path": [
+						"docs",
+						"json"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "documentation - html",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{gatewayEndpoint}}/docs",
+					"host": [
+						"{{gatewayEndpoint}}"
+					],
+					"path": [
+						"docs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "ping self",
 			"request": {
 				"method": "GET",
@@ -160,7 +195,7 @@
 	],
 	"variable": [
 		{
-			"id": "f53593dc-5bdf-4b1e-b655-251b327b91c3",
+			"id": "520f5491-13b2-4741-b757-5866ca8082dd",
 			"key": "gatewayEndpoint",
 			"value": "http://0.0.0.0:3003",
 			"type": "string"
