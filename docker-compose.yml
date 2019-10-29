@@ -14,7 +14,7 @@ services:
     container_name: fm-rabbitmq-01
     hostname: rabbitmq-01
     ports:
-      - ${RABBITMQ_PORT}:5672
+      # - ${RABBITMQ_PORT}:5672 # on production, we don't need to open this port to outside
       - ${RABBITMQ_ADMIN_PORT}:15672
     volumes:
       - "rabbitmq-01-data:/var/lib/rabbitmq"
